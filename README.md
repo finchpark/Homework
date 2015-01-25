@@ -284,3 +284,28 @@ Are you sure you want to continue connecting (yes/no)? 부분에서는 **yes를 
 
 위와 같이 출력되면 됩니다.
 
+위와 같이 출력되면 됩니다.
+
+#### 원격 저장소에서 소스 받아오기
+home/hadoop 폴더에서 git clone을 해 줍니다.
+
+	$ git clone https://github.com/finchpark/Homework.git homework
+	
+	Cloning into 'homework'...
+	remote: Counting objects: 29, done.
+	remote: Compressing objects: 100% (13/13), done.
+	remote: Total 29 (delta 3), reused 25 (delta 2)
+	Unpacking objects: 100% (29/29), done.
+	Checking connectivity... done.
+
+
+homework 디렉토리에 원격 저장소의 내용을 받아옵니다.
+
+만일 받아오지 못하고 fatal: unable to access라는 에러가 뜬다면
+
+	$ su
+	$ vi /etc/resolv.conf
+
+를 열어서 nameserver를 168.126.63.1로 입력해 DNS에서 주소를 받아올 수 있게 해 줘야 합니다.
+
+	nameserver 168.126.63.1
