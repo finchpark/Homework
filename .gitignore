@@ -39,3 +39,4 @@ target/test-classes
 
 # TeXlipse plugin
 .texlipse
+/target/
