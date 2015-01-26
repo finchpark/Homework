@@ -10,7 +10,11 @@ tmp/
 local.properties
 .settings/
 .loadpath
-target/
+target/classes
+target/maven-archiver
+target/maven-status
+target/surefire-reports
+target/test-classes
 
 # Eclipse Core
 .project

@@ -1,5 +1,9 @@
 package com.mobigen.ojt.mapreduce.examples.drivers;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
@@ -41,9 +45,49 @@ public class WordCountHomeWork extends Configured implements Tool {
 	
 	public static class WordFrequenceHomeWork extends Mapper<LongWritable, Text, Text, Text>{
 		
+		/**
+		 * @input: ((term, docid), textFrequ)
+		 * @output: (term, (docid, textFrequ, 1))
+		 */
+		@Override
+		protected void map(LongWritable key, Text value,
+				Mapper<LongWritable, Text, Text, Text>.Context context)
+				throws IOException, InterruptedException {
+			String[] input = value.toString().split("\\s+");
+			String term = input[0];
+			String docid = input[1];
+			int textFrequ = Integer.parseInt(input[2]);
+			
+			context.write(new Text(term), new Text(docid + " " + textFrequ));
+		}		
 	}
 	
 	public static class WordTFIDFHomeWork extends Reducer<Text, Text, Text, Text>{
-		
+
+		/**
+		 * @input (term, [(docid, textFreq, 1), ..])
+		 * @output ((term, docid), (textFreq, n))
+		 */
+		@Override
+		protected void reduce(Text key, Iterable<Text> values,
+				Context context)
+				throws IOException, InterruptedException {
+			Map<Text, String> counter = new HashMap<Text, String>();
+			int n = 0;
+			
+			for(Text value : values){
+				String[] docid_textFre = value.toString().split("\\s+");
+				String docid = docid_textFre[0];
+				String textFreq = docid_textFre[1];
+				
+				counter.put(new Text(key.toString() + " " + docid), textFreq);
+				n++;
+			}
+			
+			for(Text term_docid : counter.keySet()){
+				String textFreq = counter.get(term_docid);
+				context.write(term_docid, new Text(textFreq + " " + n));
+			}
+		}		
 	}
 }
