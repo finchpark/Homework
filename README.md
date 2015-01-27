@@ -1,4 +1,4 @@
-## Vagrant Up
+## **Vagrant Up**
 
 실행하고자 하는 디렉토리에서 cmd에 vagrant up을 입력하면 다음과 같이 실행됩니다.
 
@@ -13,7 +13,7 @@
 	
 	// 이하 생략
 
-### Vagrantfile
+### **Vagrantfile**
 Vagrantfile은 다음과 같이 작성되어 있습니다.
 **Vagrantfile**
 	
@@ -60,7 +60,7 @@ Vagrantfile은 다음과 같이 작성되어 있습니다.
 	  end
 	end
 
-### Shell Script
+### **Shell Script**
 또한 vagrant up 하는 동안 자동으로 필요한 부분을 설정하기 위한 Shell Script는 다음과 같습니다.
 **setup.sh**
 
@@ -191,7 +191,7 @@ Vagrantfile은 다음과 같이 작성되어 있습니다.
 	echo "192.168.200.10 slave1" >> /etc/hosts
 	echo "192.168.200.11 slave2" >> /etc/hosts
 
-## 접속
+## **접속**
 VM에 접속할 Host는 다음과 같습니다.
 
 	master: 127.0.0.1:2222
@@ -209,14 +209,14 @@ VM에 접속할 Host는 다음과 같습니다.
 		ID: root    / vagrant / hadoop
 		PW: vagrant / vagratn / hadoop
 
-### Login
+### **Login**
 
 	vagrant@master:~$ su - hadoop
 	Password:
 
 위와 같이 입력하여 hadoop ID로 로그인 합니다.
 
-### 암호화 키 생성
+### **암호화 키 생성**
 master와 slave1, 2간의 **안전한 통신을 위한 키를 생성**합니다.
 
 	hadoop@master:~$ ssh-keygen -t rsa
@@ -271,7 +271,7 @@ Are you sure you want to continue connecting (yes/no)? 부분에서는 **yes를 
 	Now try logging into the machine, with:   "ssh 'hadoop@slave1'"
 	and check to make sure that only the key(s) you wanted were added.
 
-#### 접속 확인
+#### **접속 확인**
 다음과 같이 입력해 정상적으로 접속이 되는지 확인합니다.
 
 	hadoop@master:~$ ssh hadoop@slave1
@@ -285,21 +285,69 @@ Are you sure you want to continue connecting (yes/no)? 부분에서는 **yes를 
 
 위와 같이 출력되면 됩니다.
 
-#### 원격 저장소에서 소스 받아오기
-home/hadoop 폴더에서 git clone을 해 줍니다.
+## **프로그램 실행**
+#### **Maven 디렉토리 생성하기**
+프로젝트를 수행할 홈 디렉토리를 생성합니다.
+		
+	hadoop@master:~$ mvn archetype:generate
 
-	$ git clone https://github.com/finchpark/Homework.git homework
-	
-	Cloning into 'homework'...
-	remote: Counting objects: 29, done.
-	remote: Compressing objects: 100% (13/13), done.
-	remote: Total 29 (delta 3), reused 25 (delta 2)
-	Unpacking objects: 100% (29/29), done.
-	Checking connectivity... done.
+입력하시면 다음과 같은 입력을 요하는 부분이 나옵니다. 괄호 안()과 같이 입력합니다.
+**(참고: Enter는 Enter키를 치고 넘어가라는 의미입니다.)**
 
+	Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): 522: (Enter)
+	Choose org.apache.maven.archetypes:maven-archetype-quickstart version:
+	1: 1.0-alpha-1
+	2: 1.0-alpha-2
+	3: 1.0-alpha-3
+	4: 1.0-alpha-4
+	5: 1.0
+	6: 1.1
+	Choose a number: 6: (Enter)
 
-homework 디렉토리에 원격 저장소의 내용을 받아옵니다.
+다음 입력 받는 부분이 나옵니다. 여기서는 GroudID와 ArtifactID를 정의해 줍니다. 역시 괄호() 안과 같이 입력해 주시면 됩니다.
+**(참고: Enter는 Enter키를 치고 넘어가라는 의미입니다.)**
 
+	Define value for property 'groupId': : HadoopHW
+	Define value for property 'artifactId': : HadoopHW
+	Define value for property 'version':  1.0-SNAPSHOT: :
+	Define value for property 'package':  HadoopHW: :
+	Confirm properties configuration:
+	groupId: (HadoopHW)
+	artifactId: (HadoopHW)
+	version: 1.0-SNAPSHOT
+	package: HadoopHW (Enter)
+	 Y: : (Enter)
+
+ls를 입력해 보시면, HadoopHW 디렉토리가 생성된 것을 확인할 수 있습니다.
+HadoopHW 디렉토리로 이동합니다.
+
+	hadoop@master:~$ cd HadoopHW
+
+#### **원격 저장소에서 소스 받아오기**
+HadoopHW 폴더에서 git init을 해 줍니다.
+
+	hadoop@master:/home/hadoop/HadoopHW$ git init
+	Initialized empty Git repository in /home/hadoop/HadoopHW/.git/
+
+이제 Git에게 원격 저장소의 주소를 알려줍니다.
+
+	hadoop@master:/home/hadoop/HadoopHW$ git remote add -t \* -f origin https://github.com/finchpark/Homework.git
+	Updating origin
+	remote: Counting objects: 191, done.
+	(이하 생략)
+
+Maven 생성시 생성된 pom.xml과 src/ 폴더를 삭제합니다.
+
+	hadoop@master:/home/hadoop/HadoopHW$ rm pom.xml
+	hadoop@master:/home/hadoop/HadoopHW$ rm -r src
+
+이제 원격 저장소의 내용을 받아 옵니다.
+
+	hadoop@master:/home/hadoop/HadoopHW$ git pull origin master
+	From https://github.com/finchpark/Homework
+	* branch            master     -> FETCH_HEAD
+
+**(참고)**
 만일 받아오지 못하고 fatal: unable to access라는 에러가 뜬다면
 
 	$ su
@@ -308,3 +356,25 @@ homework 디렉토리에 원격 저장소의 내용을 받아옵니다.
 를 열어서 nameserver를 168.126.63.1로 입력해 DNS에서 주소를 받아올 수 있게 해 줘야 합니다.
 
 	nameserver 168.126.63.1
+
+#### **Maven Package 생성 (jar 파일 생성) 하기**
+이제 패키지를 생성합니다.
+
+	hadoop@master:/home/hadoop/HadoopHW$ mvn package
+	[INFO] Scanning for projects...
+	[INFO]
+	[INFO] ------------------------------------------------------------------------
+	[INFO] Building HadoopHW 0.0.4-SNAPSHOT
+	[INFO] ------------------------------------------------------------------------
+	Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-resources-plugin/2.6/maven-resources-plugin-2.6.pom
+	
+	(이하생략)
+	
+	[INFO] ------------------------------------------------------------------------
+	[INFO] BUILD SUCCESS
+	[INFO] ------------------------------------------------------------------------
+	[INFO] Total time: 03:43 min
+	[INFO] Finished at: 2015-01-27T05:33:46+00:00
+	[INFO] Final Memory: 20M/59M
+	[INFO] ------------------------------------------------------------------------
+
