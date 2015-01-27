@@ -70,53 +70,51 @@ Vagrantfile은 다음과 같이 작성되어 있습니다.
 	tools=/home/hadoop/tools
 	JH=/home/hadoop/tools/jdk
 	HH=/home/hadoop/tools/hadoop
-
+	
 	# Install JDK
-	add-apt-repository ppa:openjdk-r/ppa
-	apt-get update
-	apt-get install -y openjdk-8-jre-headless
-	apt-get install -y openjdk-8-jdk
-
+	apt-get install -y openjdk-7-jre-headless
+	apt-get install -y openjdk-7-jdk
+	
 	# Install expect
 	apt-get install -y expect
-
+	
 	# Install Git
 	apt-get install -y git
-
+	
 	# Add Group and User
 	addgroup hadoop
 	useradd -g hadoop -d /home/hadoop/ -s /bin/bash -m hadoop
 	echo -e "hadoop\nhadoop" | (passwd hadoop)
-
+	
 	# Make directory for hdfs
 	host=`hostname`
 	if [ $host == "master" ]; then
-		mkdir -p /home/hadoop/hdfs/name
+	    mkdir -p /home/hadoop/hdfs/name
 	else
-		mkdir -p /home/hadoop/hdfs/data
+	    mkdir -p /home/hadoop/hdfs/data
 	fi
-
+	
 	# Download Hadoop
 	mkdir $tools
 	cd $tools
 	wget http://ftp.daum.net/apache//hadoop/common/hadoop-1.2.1/hadoop-1.2.1.tar.gz
 	tar xvf hadoop-1.2.1.tar.gz
 	ln -s $tools/hadoop-1.2.1 $tools/hadoop
-	ln -s /usr/lib/jvm/java-1.8.0-openjdk-amd64 $tools/jdk
-
+	ln -s /usr/lib/jvm/java-1.7.0-openjdk-amd64 $tools/jdk
+	
 	# Download Maven
 	cd $tools
 	wget http://mirror.apache-kr.org/maven/maven-3/3.2.5/binaries/apache-maven-3.2.5-bin.tar.gz
 	tar xvf apache-maven-3.2.5-bin.tar.gz
 	ln -s $tools/apache-maven-3.2.5 $tools/maven
-
+	
 	# Hadoop Setting
 	# hadoop-env.sh
 	echo "export JAVA_HOME=/home/hadoop/tools/jdk" >> $HH/conf/hadoop-env.sh
 	echo "export HADOOP_HOME=/home/hadoop/tools/hadoop" >> $HH/conf/hadoop-env
 	echo "export HADOOP_HOME_WARN_SUPRESS=\"TRUE\"" >> $HH/conf/hadoop-env.sh
 	echo "export HADOOP_OPTS=-server" >> $HH/conf/hadoop-env.sh
-
+	
 	# core-site.xml
 	echo "<?xml version=\"1.0\"?>" > $HH/conf/core-site.xml
 	echo "<?xml-stylesheet type=\"text/xsl\" href=\"configuration.xsl\"?>" >> $HH/conf/core-site.xml
@@ -129,7 +127,7 @@ Vagrantfile은 다음과 같이 작성되어 있습니다.
 	echo "    <value>hdfs://master:9000</value>" >> $HH/conf/core-site.xml
 	echo "  </property>" >> $HH/conf/core-site.xml
 	echo "</configuration>" >> $HH/conf/core-site.xml
-
+	
 	# hdfs-site.xml
 	echo "<?xml version=\"1.0\"?>" > $HH/conf/hdfs-site.xml
 	echo "<?xml-stylesheet type=\"text/xsl\" href=\"configuration.xsl\"?>" >> $HH/conf/hdfs-site.xml
@@ -152,7 +150,7 @@ Vagrantfile은 다음과 같이 작성되어 있습니다.
 	echo "    <value>3</value>" >> $HH/conf/hdfs-site.xml
 	echo "  </property>" >> $HH/conf/hdfs-site.xml
 	echo "</configuration>" >> $HH/conf/hdfs-site.xml
-
+	
 	# mapred-site.xml
 	echo "<?xml version=\"1.0\"?>" > $HH/conf/mapred-site.xml
 	echo "<?xml-stylesheet type=\"text/xsl\" href=\"configuration.xsl\"?>" >> $HH/conf/mapred-site.xml
@@ -165,13 +163,13 @@ Vagrantfile은 다음과 같이 작성되어 있습니다.
 	echo "    <value>master:9001</value>" >> $HH/conf/mapred-site.xml
 	echo "  </property>" >> $HH/conf/mapred-site.xml
 	echo "</configuration>" >> $HH/conf/mapred-site.xml
-
+	
 	# masters, slaves
 	echo "master" > $HH/conf/masters
 	echo "slave1" > $HH/conf/slaves
 	echo "slave2" >> $HH/conf/slaves
 	# End Hadoop Setting
-
+	
 	# Setting Environment
 	chown -R hadoop:hadoop /home/hadoop
 	chmod 755 -R /home/hadoop
@@ -180,7 +178,8 @@ Vagrantfile은 다음과 같이 작성되어 있습니다.
 	echo "export M2_HOME=$tools/maven" >> ~hadoop/.bashrc
 	echo "export PATH=\$PATH:\$JAVA_HOME/bin:\$HH/bin" >> ~hadoop/.bashrc
 	echo "export PATH=\$PATH:\$M2_HOME/bin" >> ~hadoop/.bashrc
-
+	echo "export PATH=\$PATH:\$HADOOP_HOME/bin=/home/hadoop/tools/hadoop/bin" >> ~hadoop/.bashrc
+	
 	# Setting Hosts
 	# /etc/hosts Setting
 	echo "fe00::0 ip6-localnet" > /etc/hosts
