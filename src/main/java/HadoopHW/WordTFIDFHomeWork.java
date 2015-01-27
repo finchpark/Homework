@@ -41,6 +41,9 @@ public class WordTFIDFHomeWork extends Configured implements Tool {
 
 		job.setOutputKeyClass(TextInputFormat.class);
 		job.setOutputValueClass(TeeOutputStream.class);
+		
+		job.setInputFormatClass(TextInputFormat.class);
+		job.setOutputFormatClass(TextOutputFormat.class);
 
 		TextInputFormat.addInputPath(job, new Path(args[1]));
 		TextOutputFormat.setOutputPath(job, new Path(args[2]));
