@@ -210,6 +210,7 @@ VM에 접속할 Host는 다음과 같습니다.
 		PW: vagrant / vagratn / hadoop
 
 ### **Login**
+Hadoop 계정으로 로그인 했다면 상관 없지만, 다른 계정으로 접속한 경우 다음과 같이 입력합니다.
 
 	vagrant@master:~$ su - hadoop
 	Password:
@@ -286,7 +287,7 @@ Are you sure you want to continue connecting (yes/no)? 부분에서는 **yes를 
 위와 같이 출력되면 됩니다.
 
 ## **프로그램 실행**
-#### **Maven 디렉토리 생성하기**
+### **Maven 디렉토리 생성하기**
 프로젝트를 수행할 홈 디렉토리를 생성합니다.
 		
 	hadoop@master:~$ mvn archetype:generate
@@ -323,7 +324,7 @@ HadoopHW 디렉토리로 이동합니다.
 
 	hadoop@master:~$ cd HadoopHW
 
-#### **원격 저장소에서 소스 받아오기**
+### **원격 저장소에서 소스 받아오기**
 HadoopHW 폴더에서 git init을 해 줍니다.
 
 	hadoop@master:/home/hadoop/HadoopHW$ git init
@@ -357,7 +358,7 @@ Maven 생성시 생성된 pom.xml과 src/ 폴더를 삭제합니다.
 
 	nameserver 168.126.63.1
 
-#### **Maven Package 생성 (jar 파일 생성) 하기**
+### **Maven Package 생성 (jar 파일 생성) 하기**
 이제 패키지를 생성합니다.
 
 	hadoop@master:/home/hadoop/HadoopHW$ mvn package
@@ -377,4 +378,38 @@ Maven 생성시 생성된 pom.xml과 src/ 폴더를 삭제합니다.
 	[INFO] Finished at: 2015-01-27T05:33:46+00:00
 	[INFO] Final Memory: 20M/59M
 	[INFO] ------------------------------------------------------------------------
+
+### **jar 파일 실행 준비하기**
+압축된 shakespeare.tar.gz 파일을 압축해제 합니다.
+
+	hadoop@master:/home/hadoop/HadoopHW/files$ tar xvf shakespeare.tar.gz
+	shakespeare/
+	shakespeare/comedies
+	shakespeare/glossary
+	shakespeare/histories
+	shakespeare/poems
+	shakespeare/tragedies
+
+이제 namenode를 포멧합니다. 재 포멧할 것인지 묻는 질문이 나온다면 Y(반드시 대문자로)를 입력해 줍니다.
+
+	hadoop@master:/home/hadoop/HadoopHW$ hadoop namenode -format
+	Re-format filesystem in /home/hadoop/hdfs/name ? (Y or N) Y
+
+NameNode, JobTracker, SecondaryNamenode, DataNode를 실행시키기 위해 start-all.sh를 실행합니다.
+
+	hadoop@master:/home/hadoop/HadoopHW$ start-all.sh
+
+이후, jps를 입력했을 때 다음과 같이 나오면 정상적으로 시작된 것입니다.
+
+	master
+	15694 NameNode
+	15951 JobTracker
+	16050 Jps
+	15876 SecondaryNameNode
+
+	slave
+	15201 TaskTracker
+	15292 Jps
+	15086 DataNode
+
 
