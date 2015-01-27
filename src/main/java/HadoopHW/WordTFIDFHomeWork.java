@@ -16,7 +16,6 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.tools.ant.util.TeeOutputStream;
 
 public class WordTFIDFHomeWork extends Configured implements Tool {
 
@@ -39,8 +38,8 @@ public class WordTFIDFHomeWork extends Configured implements Tool {
 		job.setMapperClass(WordTFIDFMapper.class);
 		job.setReducerClass(WordTFIDFReducer.class);
 
-		job.setOutputKeyClass(TextInputFormat.class);
-		job.setOutputValueClass(TeeOutputStream.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(Text.class);
 		
 		job.setInputFormatClass(TextInputFormat.class);
 		job.setOutputFormatClass(TextOutputFormat.class);
@@ -77,7 +76,7 @@ public class WordTFIDFHomeWork extends Configured implements Tool {
 			double idf = Math.log(N / n);
 			double tfidf = termFreq * idf;
 
-			context.write(new Text(term + "@" + docID),
+			context.write(new Text(term + ":" + docID),
 					new Text(String.valueOf(tfidf)));
 		}
 
