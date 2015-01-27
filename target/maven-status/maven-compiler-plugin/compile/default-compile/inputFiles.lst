@@ -1,6 +1,3 @@
-C:\workspace\HadoopHW\src\main\java\com\mobigen\ojt\mapreduce\examples\drivers\WordCountsInDocuments.java
-C:\workspace\HadoopHW\src\main\java\com\mobigen\ojt\mapreduce\examples\drivers\WordTFIDFHomeWork.java
-C:\workspace\HadoopHW\src\main\java\com\mobigen\ojt\mapreduce\examples\drivers\WordFrequenceInDocument.java
-C:\workspace\HadoopHW\src\main\java\com\mobigen\ojt\mapreduce\examples\drivers\WordFrequenceHomeWork.java
-C:\workspace\HadoopHW\src\main\java\com\mobigen\ojt\mapreduce\examples\drivers\WordsInCorpusTFIDF.java
-C:\workspace\HadoopHW\src\main\java\com\mobigen\ojt\mapreduce\examples\drivers\WordCountHomeWork.java
+/home/hadoop/HadoopHW/src/main/java/com/mobigen/ojt/mapreduce/examples/drivers/WordCountHomeWork.java
+/home/hadoop/HadoopHW/src/main/java/com/mobigen/ojt/mapreduce/examples/drivers/WordFrequenceHomeWork.java
+/home/hadoop/HadoopHW/src/main/java/com/mobigen/ojt/mapreduce/examples/drivers/WordTFIDFHomeWork.java

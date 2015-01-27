@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-core</artifactId>
-			<version>0.20.2</version>
+			<version>1.2.1</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -43,12 +43,6 @@
 						<!-- package로 assemply가 될 때 jar파일을 생성할 때 jar파일에 같이 붙이는 이름 -->
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
-					<archive>
-						<manifest>
-							<!-- 메인이 있는 클래스의 클래스명을 알려준다. -->
-							<mainClass>com.mobigen.ojt.mapreduce.examples.drivers.WordFrequenceHomeWork</mainClass>
-						</manifest>
-					</archive>
 				</configuration>
 				<executions>
 					<execution>
