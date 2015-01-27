@@ -1,4 +1,4 @@
-package com.mobigen.ojt.mapreduce.examples.drivers;
+package HadoopHW;
 
 import java.io.IOException;
 import java.util.HashMap;
